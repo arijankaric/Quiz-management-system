@@ -1,0 +1,203 @@
+body, html {
+    margin: 0px;
+    padding: 0px;
+    background-image: url("../images/background.png");
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+    background-color: lightgray;
+    font-family: 'Trebuchet MS';
+}
+
+.Container {
+    width: 90%;
+    min-width: 100%;
+    margin: auto;
+}
+
+iframe{
+    margin-left: 3.5%;
+    width: 44.5vw; 
+    height: 25vmax;
+    border-radius: 10px;
+}
+
+.bar{
+    height: 45px;
+    overflow: initial;
+    background-color: darkslategray;
+}
+
+.bar span{
+    color: white;
+    height: auto;
+    width: auto;
+    padding-top: 0.25%;
+    padding-left: 1%;
+    text-align: left;
+    display: inline-block;
+    font-family: 'Lucida Grande';
+    font-size: 25px;
+}
+
+.title {
+    margin: 2% 6% 2% 7.25%;
+    width: 35%;
+    display: inline-block;
+    text-align: center;
+    color: whitesmoke;
+    background-color: darkcyan;
+    font-size: 2vmax;
+    border-radius: 100px;
+    box-shadow: 5px 10px 18px darkgray;
+}
+
+.button-cicrle{
+    display: inline-block;
+    text-align: center;
+    color: whitesmoke;
+    background-color: darkcyan;
+    border-radius: 10px;
+    box-shadow: 5px 10px 18px darkgray;
+}
+.rank-title-max
+{
+    background-color: darkcyan;
+    color: whitesmoke;
+    width: 90%;
+    border-radius: 50px;
+    text-align: center;
+    margin: 1% 0% 1% 0%;
+    font-size: 3.5vmax;
+    box-shadow: 5px 10px 18px darkgray;
+}
+
+.rank-title
+{
+    background-color: darkcyan;
+    color: whitesmoke;
+    width: 90%;
+    border-radius: 50px;
+    text-align: center;
+    margin: 1% 0% 1% 0%;
+    font-size: 3.5vmax;
+    box-shadow: none;
+}
+
+.vote-btn{
+    margin: 2% 6% 2.5% 7.25%;
+    width: 35%;
+    font-size: 24px;
+    height: 2em;
+}
+
+.rank-head{
+    margin-top: 7%;
+    display: inline-block;
+    text-align: center;
+    font-size: 3.5vmax;
+    font-family: Impact;
+    border-bottom: solid;
+    color:darkcyan;
+}
+
+
+.column {
+    text-align: center;
+    display: inline-block;
+    width: 30%;
+    margin-top: 1%;
+    margin-left: 5%;
+    height: 22vmax;
+}
+
+.column-votes
+{
+    width: 20%;
+}
+
+.row{
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 1%;
+    margin-bottom: 1.5%;
+    background-color: darkslategray;
+    border-radius: 15px;
+    box-shadow: 5px 10px 18px darkgray;
+}
+
+.row:after {
+    content: "";
+    display: inline-block;
+    clear: both;
+}
+
+.thumbnail
+{
+    margin-top: 2%;
+    height: 90%; 
+    width: 90%;
+    border-radius: 50px;
+    border: solid;
+    border-color: darkcyan;
+}
+
+.column-text{
+    font-family: 'Lucida Grande', Geneva;
+    font-size: 1.5vmax;
+    color: whitesmoke;
+}
+
+.btn {
+    background-color: darkcyan;
+    border: none;
+    color: white;
+    padding: auto auto;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 5px 10px 18px darkgray;
+}
+
+.btn:hover {
+    background-color: RoyalBlue;
+}
+
+.menu{
+    height: 45px;
+    overflow: initial;
+    text-align: left;
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+.menu a{
+    margin-top: 5px;
+    margin-right: 2.5px;
+}
+
+.prev-next-field{
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 1%;
+}
+
+.small-ranking{
+    background-color: darkslategray;
+    text-align: center;
+    margin-bottom: 3%;
+}
+
+.full-ranking{
+    text-align: center; 
+    margin-top: 1%;
+    margin-bottom: 3%;
+}
+
+.footer{
+    height: 20px;
+    overflow: hidden;
+    background-color: darkslategray;
+    color: white;
+    text-align: center;
+    font-family: 'Gill Sans MT', sans-serif;
+}

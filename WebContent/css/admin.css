@@ -1,0 +1,106 @@
+.btn {
+	background-color: slategray;
+	border: none;
+	color: white;
+	font-size: 16px;
+	cursor: pointer;
+	box-shadow: 5px 10px 18px darkgray;
+}
+
+.btn:hover {
+	background-color: RoyalBlue;
+}
+
+.vote-btn {
+	width: 80%;
+	font-size: large;
+	height: 2em;
+	border-radius: 50px;
+}
+
+.title {
+	padding-top: 1em;
+	font-size: large;
+	color: lightslategray;
+}
+
+.logInBox {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: lightsteelblue;
+	width: 60ex;
+	border-radius: 50px;
+	box-shadow: 5px 10px 18px darkgray;
+}
+
+.errorCSS {
+	padding-bottom: 1em;
+	font-size: large;
+	color: red;
+}
+
+.btn1 {
+	background-color: darkgray;
+	border: none;
+	color: white;
+	font-size: large;
+	cursor: pointer;
+	width: 20ex;
+	padding-top: 0.4vmax;
+	padding-bottom: 0.4vmax;
+	margin-left: 0.4vmax;
+	margin-top: 0.8vmax;
+	margin-bottom: 0.8vmax;
+	box-shadow: 5px 10px 18px darkgray;
+}
+
+.btn1:hover {
+	background-color: RoyalBlue;
+}
+
+table, td, th {
+	background-color: #e0e0e0;
+}
+
+table {
+	width: 80%;
+	margin-top: 0.8vmax;
+	margin-bottom: 1vmax;
+}
+
+.text {
+	font-family: Impact, Charcoal, sans-serif;
+	background-color: #eaeaea;
+	color: blueviolet;
+	border-radius: 50px;
+	font-size: medium;
+	padding-top: 0.4vmax;
+	padding-bottom: 0.4vmax;
+	margin: 0.7vmax;
+}
+
+.text2 {
+	background-color: #eaeaea;
+	border-radius: 30px;
+	padding-top: 0.4vmax;
+	padding-bottom: 0.4vmax;
+	margin: 0.7vmax;
+}
+
+.portrait {
+	padding: 0.2vmax;
+	height: 4vmax;
+}
+
+.littleIcons {
+	display: block;
+	padding-left: 7.5vmax;
+}
+
+.littleIcons1 {
+	display: block;
+	margin-left: 1.65vmax;
+	margin-right: 1.5vmax;
+}
