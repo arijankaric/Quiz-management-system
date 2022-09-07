@@ -15,7 +15,7 @@
         <div class="container">
             <div class="split left">
                 <h1>Client</h1>
-                <a href="#" class="button">Play Quiz</a>
+                <a href="/projekat/clientLogin" class="button">Play Quiz</a>
             </div>
             <div class="split right">
                 <h1>Admin</h1>

@@ -1,8 +1,2 @@
- How well do you know the world;Quiz about world knowledge;true;https://bit.ly/3iRcpTX;sead;
- How much do you know about animals;Quiz about animal knowledge;true;https://bit.ly/34aY9Bn;sead;
- Do you read books, test you knowledge;Quiz about books and stories;true;https://bit.ly/3gWGYa5;eldar;
- Test your vehicles knowledge;Quiz about vehicles;true;https://bit.ly/2FvE6TR;eldar;
- Driving Quiz;Are you ready to drive a car;true;https://bit.ly/2Fzn4nQ;sead;
- Servlets Quiz;Test your knowledge about Servlets;true;https://bit.ly/2YmCh28;sead;
- JavaScript Quiz;How good do you know JavaScript;true;https://bit.ly/3laCRJR;sead;
- Test quiz not working;Description about that quiz;false;https://bit.ly/34PTKUL;sead;
+ servlet-s Quiz;test your knowledge about servlet-s;true;imgs/Servlet.jpg;arijan;
+ JavaScript Quiz;How good do you know JavaScript;true;imgs/JS.png;arijan;

@@ -4,14 +4,13 @@ import Model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.List;
 
 final public class UserDao extends AbstractDao {
     public UserDao() {
     }
 
-    @Transactional
+    
     public void insert(User user) {
         EntityManager em = getEMF().createEntityManager();
         em.getTransaction().begin();
@@ -62,7 +61,6 @@ final public class UserDao extends AbstractDao {
         return userList;
     }
 
-    @Transactional
     public void updateUser(String oldUserName, String username, String password, int role) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("UPDATE User u SET u.username = :username, u.password = :password, u.role = :role WHERE u.username = :oldUserName");
@@ -76,7 +74,6 @@ final public class UserDao extends AbstractDao {
         em.close();
     }
 
-    @Transactional
     public void removeUser(String username) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("DELETE FROM User u WHERE u.username = :username");

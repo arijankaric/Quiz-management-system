@@ -31,10 +31,21 @@ public class QuizService {
 
     public void createQuiz(Quiz quiz) {
         quizDao.saveQuizToDB(quiz);
+//        Quiz lastQuiz = quizDao.getQuizById(quizDao.getNumberOfQuizzes().intValue()-1);
+//        quizDao.updateQuiz(quiz.getTitle(), quiz.getDescription(), quiz.getImageUrl(), quiz.isActive(), Math.toIntExact(quizDao.getNumberOfQuizzes())-1);
+    }
+    
+    public void createQuizModified(Quiz quiz) {
+        quizDao.saveQuizToDB(quiz);
+        quizDao.updateQuiz(quiz.getTitle(), quiz.getDescription(), quiz.getImageUrl(), quiz.isActive(), Math.toIntExact(quizDao.getNumberOfQuizzes())-1);
     }
 
     public List<Quiz> getQuizzes() {
         return quizDao.getQuizzes();
+    }
+    
+    public List<Quiz> getQuizzesDefault() {
+        return quizDao.getQuizzesDefault();
     }
 
     public List<Quiz> getRandomQuizzes() {

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
 import Model.User;
 import dao.UserDao;
 import service.UserService;
@@ -53,16 +55,16 @@ public class AdminLogin extends HttpServlet {
 		if(session != null)
 		{
 			Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
-			if(loggedIn != null && loggedIn == true)
+			if(loggedIn != null && loggedIn.equals(true))
 			{
-                response.sendRedirect("/admin/index");
+                response.sendRedirect("admin/index");
 
 //				request.getRequestDispatcher("adminIndex.jsp").forward(request, response);
 			}
 		}
 		
 //        response.sendRedirect("/adminLogin");
-		request.getRequestDispatcher("adminLogin.jsp").include(request, response);
+		request.getRequestDispatcher("doubleLogin.jsp").include(request, response);
 	}
 
 	/**
@@ -71,19 +73,23 @@ public class AdminLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 //		doGet(request, response);
-		
+		System.out.println("doPost AdminLogin Start");
 		String username = request.getParameter("username");
         String password = request.getParameter("password");
         Map<String, String> messages = new HashMap<>();
+//        String text;
+//        boolean flag = false;  
 
         if (username == null || username.isEmpty()) {
             messages.put("username", "Please enter a username");
+    		messages.put("success", "false");
         }
 
         if (password == null || password.isEmpty()) {
             messages.put("password", "Please enter a password");
+    		messages.put("success", "false");
         }
-
+        
         if (messages.isEmpty()) {
             User user = userService.authenticate(username, password);
             if (user != null) {
@@ -92,19 +98,26 @@ public class AdminLogin extends HttpServlet {
 
                     session.setAttribute("user", user);
             		session.setAttribute("loggedIn", true);
-                    response.sendRedirect("/admin/adminIndex");
-                    return;
+//                    response.sendRedirect("/admin/index");
+//            		flag = true;
+            		messages.put("success", "true");
                 } else {
+            		messages.put("success", "false");
                     messages.put("login", "You are not admin. Only admin can login to admin panel.");
                 }
             } else {
-                messages.put("login", "Unknown login, please try again");
+        		messages.put("success", "false");
+                messages.put("login", "Unknown user, please try again");
             }
         }
-        request.setAttribute("messages", messages);
-        request.getRequestDispatcher("/adminLogin.jsp").include(request, response);
+//        request.setAttribute("messages", messages);
+//        request.getRequestDispatcher("/doubleLogin.jsp").include(request, response);
 		
-		
+        String json = new Gson().toJson(messages);
+        
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 		
 //		request.getParameter("userToRemove");
 	}

@@ -23,34 +23,7 @@ public class Login extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        Map<String, String> messages = new HashMap<>();
-
-        if (username == null || username.isEmpty()) {
-            messages.put("username", "Please enter a username");
-        }
-
-        if (password == null || password.isEmpty()) {
-            messages.put("password", "Please enter a password");
-        }
-
-        if (messages.isEmpty()) {
-            User user = userService.authenticate(username, password);
-            if (user != null) {
-                if (user.getRole() == 1 || user.getRole() == 2) {
-                    request.getSession().setAttribute("user", user);
-                    response.sendRedirect("/admin/admin.jsp");
-                    return;
-                } else {
-                    messages.put("login", "You are not admin. Only admin can login to admin panel.");
-                }
-            } else {
-                messages.put("login", "Unknown login, please try again");
-            }
-        }
-        request.setAttribute("messages", messages);
-        request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
+        
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

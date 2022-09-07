@@ -4,14 +4,12 @@ import Model.Question;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.List;
 
 final public class QuestionDao extends AbstractDao {
     public QuestionDao() {
     }
 
-    @Transactional
     public void saveQuestionToDB(Question question) {
         EntityManager em = getEMF().createEntityManager();
         em.getTransaction().begin();
@@ -37,7 +35,6 @@ final public class QuestionDao extends AbstractDao {
         return questionList;
     }
 
-    @Transactional
     public void updateQuestion(int questionId, String questionTitle, int questionTimeToAnswer, int questionScore) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("UPDATE Question u SET u.title = :questionTitle, u.score = :questionScore, u.timeToAnswer = :questionTimeToAnswer WHERE u.id = :questionId");
@@ -60,7 +57,6 @@ final public class QuestionDao extends AbstractDao {
         return question;
     }
 
-    @Transactional
     public void removeQuestionById(int questionId) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("DELETE FROM Question u WHERE u.id = :id");

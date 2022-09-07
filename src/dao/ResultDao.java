@@ -4,14 +4,12 @@ import Model.Result;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.List;
 
 final public class ResultDao extends AbstractDao {
     public ResultDao() {
     }
 
-    @Transactional
     public void saveResultToDB(Result result) {
         EntityManager em = getEMF().createEntityManager();
         em.getTransaction().begin();

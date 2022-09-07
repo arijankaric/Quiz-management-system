@@ -5,22 +5,22 @@
 	<persistence-unit name="projekat" transaction-type="RESOURCE_LOCAL">
 	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 <!-- 	<exclude-unlisted-classes>false</exclude-unlisted-classes> -->
-<!-- 		<class>Model.Answer</class> -->
+		<class>Model.Answer</class>
 		<class>Model.Question</class>
 		<class>Model.Quiz</class>
 		<class>Model.Result</class>
 		<class>Model.User</class>
-		<class>Model.Answer</class>		
 		<properties>
 <!-- 			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" /> -->
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-
+<!-- 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" /> -->
 			<property name="eclipselink.jdbc.batch-writing" value="JDBC" />
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver" />
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:derby://localhost:1527/sample;create=true" />
-			<property name="javax.persistence.jdbc.user" value="test" />
-			<property name="javax.persistence.jdbc.password" value="test" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/sample;create=true" /> -->
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/?user=root" />
+
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="root" />
+<!-- 			<property name="eclipselink.logging.level" value="FINEST"/>	 -->
 		</properties>
 
 	</persistence-unit>

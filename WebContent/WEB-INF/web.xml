@@ -141,4 +141,44 @@
 		<servlet-name>GetVideo</servlet-name>
 		<url-pattern>/GetVideo</url-pattern>
 	</servlet-mapping>	
+	
+	<servlet>
+    <servlet-name>adminIndexJsp</servlet-name>
+    <jsp-file>/adminIndex.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+    <servlet-name>adminIndexJsp</servlet-name>
+    <url-pattern>/admin/adminIndex.jsp</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>adminListJsp</servlet-name>
+    <jsp-file>/adminList.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+    <servlet-name>adminListJsp</servlet-name>
+    <url-pattern>/admin/adminList.jsp</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>adminQuizzesJsp</servlet-name>
+    <jsp-file>/adminQuizzes.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+    <servlet-name>adminQuizzesJsp</servlet-name>
+    <url-pattern>/admin/adminQuizzes.jsp</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>editQuizJsp</servlet-name>
+    <jsp-file>/editQuiz.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+    <servlet-name>editQuizJsp</servlet-name>
+    <url-pattern>/admin/editQuiz.jsp</url-pattern>
+	</servlet-mapping>
 </web-app>

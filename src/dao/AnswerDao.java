@@ -2,7 +2,6 @@ package dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import Model.Answer;
 import Model.Question;
@@ -11,7 +10,6 @@ final public class AnswerDao extends AbstractDao {
     public AnswerDao() {
     }
 
-    @Transactional
     public void saveAnswerToDB(Answer answer) {
         EntityManager em = getEMF().createEntityManager();
         em.getTransaction().begin();
@@ -28,7 +26,6 @@ final public class AnswerDao extends AbstractDao {
         return numberOfAnswers;
     }
 
-    @Transactional
     public void removeAnswerById(int answerId) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("DELETE FROM Answer u WHERE u.id = :id");
@@ -39,7 +36,6 @@ final public class AnswerDao extends AbstractDao {
         em.close();
     }
 
-    @Transactional
     public void updateAnswer(int questionId, String answerTitle, boolean status, int answerId) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("UPDATE Answer u SET u.title = :answerTitle, u.correct = :status WHERE u.id = :answerId AND u.question.id = :questionId");
@@ -53,7 +49,6 @@ final public class AnswerDao extends AbstractDao {
         em.close();
     }
 
-    @Transactional
     public void moveAnswerToQuestion(int answerId,Question newQuestion, int oldQuestionId) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("UPDATE Answer u SET u.question = :newQuestion WHERE u.id = :answerId AND u.question.id = :oldQuestionId");

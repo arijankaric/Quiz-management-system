@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "answer")
+@Table(name = "answer", schema = "rwaquiz")
 public class Answer {
     private int id;
     private String title;
@@ -78,17 +78,4 @@ public class Answer {
                 "\"title\":\"" + title + "\"," +
                 "\"correct\":" + isCorrect + '}';
     }
-    
-//    @OneToMany
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size=10)
-    
-//    @OneToMany(mappedBy = "user" fetch = FetchType.LAZY)
-
-    
-//    @Query("SELECT user FROM User user JOIN user.infoList info")
-//    public List<User> getUsersJoin();
-//
-//    @Query("SELECT user FROM User user JOIN FETCH user.infoList info")
-//    public List<User> getUsersJoinFetch();
 }

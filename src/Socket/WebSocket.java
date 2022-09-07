@@ -1,7 +1,10 @@
 package Socket;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -20,14 +23,28 @@ import java.util.concurrent.ThreadLocalRandom;
 @ServerEndpoint(
 		value = "/quizGameplay",
 		decoders = MessageDecoder.class, 
-		encoders = MessageEncoder.class )
+		encoders = MessageEncoder.class,
+		configurator = CustomConfigurator.class)
 public class WebSocket {
+	
+	private HttpSession httpSession;
+	private Boolean loggedIn;
+	private String quizCode = new String();
+	
+	public void setHttpSession(HttpSession httpSession) {
+        if (this.httpSession != null) {
+            throw new IllegalStateException("HttpSession has already been set!");
+        }
+
+        this.httpSession = httpSession;
+    }
 
 //	private static final List<Session> clientSession = new ArrayList<>();
 //	private static final List<Integer> activeQuizzes = new ArrayList<>();
 //	private static final Set<Session> sessions =  new CopyOnWriteArraySet<Session>();
 	private static final Map<String, LiveQuiz> quizzes = new HashMap<String, LiveQuiz>();
 	private static final int maxCode = 9999;
+	private static final List<Session> adminSession = new ArrayList<>();
 	
 	
 	
@@ -90,6 +107,20 @@ public class WebSocket {
 //			}
 //		}
 	}
+	
+	private boolean checkLoggedIn()
+	{
+		return (loggedIn != null) && (loggedIn.equals(true));
+	}
+	
+	@OnError
+	public void onError(Session session, Throwable t) {
+		if(checkLoggedIn())
+		{
+			adminSession.remove(session);
+		}
+		System.out.println("WS onError");
+	}
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException {
@@ -99,6 +130,25 @@ public class WebSocket {
 //		session.getUserProperties().get("quizCode");
 		
 		System.out.println("New client connected!");
+		System.out.println(httpSession);
+		this.loggedIn = (Boolean) httpSession.getAttribute("loggedIn");
+		System.out.println("loggedIn: " + loggedIn);
+		if(checkLoggedIn())
+		{
+			adminSession.add(session);
+			final int[] activeSessions = {0};
+			quizzes.forEach((k, v) -> {
+				activeSessions[0] += v.getSessions().size() - 1;
+			});
+			Message msg = new Message();
+			msg.setQuizId(activeSessions[0]);
+			msg.setQuizCode("activeClients");
+			sendMessage(msg, session);
+//			msg.setQuizCode(null);
+		}
+//		System.out.println("loggedIn: " + loggedIn);
+//        System.out.println("My Session Id: " + httpSession.getId());
+
 	}
 
 	@OnClose
@@ -106,11 +156,16 @@ public class WebSocket {
 //		sessions.remove(session);
 //		sendMessageToAll();
 		
-		String qC = (String) session.getUserProperties().get("quizCode");
-		LiveQuiz lQ = quizzes.get(qC);
+//		String qC = (String) session.getUserProperties().get("quizCode");
+		LiveQuiz lQ = quizzes.get(quizCode);
 		
-		lQ.getSessions().removeIf(s -> (s.equals(session))); // safe guard if connection closes without message
+		if(lQ != null)
+			lQ.getSessions().removeIf(s -> (s.equals(session))); // safe guard if connection closes without message
 		
+		if(checkLoggedIn())
+		{
+			adminSession.remove(session);
+		}
 //		for (Map.Entry mapElement : quizzes.entrySet()) {
 //			
 //			Map<String, LiveQuiz> sessions = (Map<String, LiveQuiz>) mapElement.getValue();

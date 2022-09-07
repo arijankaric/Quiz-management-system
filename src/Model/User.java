@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user", schema = "rwaquiz")
 public class User {
     private int id;
     private String username;
