@@ -37,15 +37,11 @@ public class QuizService {
     
     public void createQuizModified(Quiz quiz) {
         quizDao.saveQuizToDB(quiz);
-        quizDao.updateQuiz(quiz.getTitle(), quiz.getDescription(), quiz.getImageUrl(), quiz.isActive(), Math.toIntExact(quizDao.getNumberOfQuizzes())-1);
+        quizDao.updateQuiz(quiz.getTitle(), quiz.getDescription(), quiz.getImageUrl(), Math.toIntExact(quizDao.getNumberOfQuizzes())-1);
     }
 
     public List<Quiz> getQuizzes() {
         return quizDao.getQuizzes();
-    }
-    
-    public List<Quiz> getQuizzesDefault() {
-        return quizDao.getQuizzesDefault();
     }
 
     public List<Quiz> getRandomQuizzes() {
@@ -59,8 +55,7 @@ public class QuizService {
     public void updateQuiz(String quizTitle,
                            String quizDesc,
                            String imageUrl,
-                           boolean isActive,
                            int quizId) {
-        quizDao.updateQuiz(quizTitle, quizDesc, imageUrl, isActive, quizId);
+        quizDao.updateQuiz(quizTitle, quizDesc, imageUrl, quizId);
     }
 }

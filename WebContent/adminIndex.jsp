@@ -25,8 +25,10 @@
 			
 		<div class="items">
 			<li><i class="fad fa-chart-pie-alt"></i><a href="index">Dashboard</a></li>
-			<li><i class="fas fa-th-large"></i><a href="quizzes">Quizzes</a></li>	   
+			<li><i class="fas fa-th-large"></i><a href="quizzes">Quizzes</a></li>
+			<% if(session.getAttribute("role").equals(1)){ %>	   
 			<li><i class="fas fa-edit"></i><a href="admins">Admins</a></li>
+			<% }%>
 		</div>
 	</section>
 	

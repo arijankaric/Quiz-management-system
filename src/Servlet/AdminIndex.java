@@ -29,8 +29,9 @@ public class AdminIndex extends HttpServlet {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 //		System.out.println("My session id: " + request.getSession(false).getId());
+		System.out.println("doGet /admin/index start");
 		request.getRequestDispatcher("adminIndex.jsp").include(request, response);
-
+		System.out.println("doGet /admin/index end");
 	}
 
 	/**

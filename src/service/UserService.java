@@ -46,6 +46,10 @@ public class UserService {
     public void updateUser(String oldUserName, String username, String password, int role) {
         userDao.updateUser(oldUserName, username, password, role);
     }
+    
+    public void updateUser(int id, String username, String password, int role) {
+        userDao.updateUser(id, username, password, role);
+    }
 
     public User authenticate(String username, String password) {
 

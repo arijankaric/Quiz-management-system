@@ -1,9 +1,13 @@
-let playId = document.getElementById("playForm");
-let loginId = document.getElementById("loginForm");
-let registerId = document.getElementById("registerForm");
-let btnId = document.getElementById("btn");
-let heroClass = document.querySelector('.hero');
-let wrapperBottomId = document.getElementById("wrapper_bottom");
+const playId = document.getElementById("playForm");
+const loginId = document.getElementById("loginForm");
+const registerId = document.getElementById("registerForm");
+const btnId = document.getElementById("btn");
+const heroClass = document.querySelector('.hero');
+const wrapperBottomId = document.getElementById("wrapper_bottom");
+
+const quizCodeInput = document.getElementById("quizCode");
+const nicknameInput = document.getElementById("nickname");
+const rememberNicknameCheckBox = document.getElementById("rememberNickname");
 
 const images = ['imgs/quiz.jpg', 'imgs/admin.jpg'];
 
@@ -15,6 +19,18 @@ const images = ['imgs/quiz.jpg', 'imgs/admin.jpg'];
 const changeImage = function(id, image) {
 	$(id).css('background-image', 'url(' + image + ')');
 };
+
+//function sleep(ms) {
+//	return new Promise(resolve => setTimeout(resolve, ms));
+//}
+//
+//async function sleepFor(howLong) {
+//	for (let i = 0; i < howLong; i++) {
+//		console.log(`Waiting ${i} seconds...`);
+//		await sleep(i * 1000);
+//	}
+//	console.log('Done');
+//}
 
 function changeBackground() {
 	$('#wrapper_bottom').animate({
@@ -81,141 +97,248 @@ function playAnimation() {
 	}
 }
 
-playAnimation();
+$('#playBtn').click(function(event) {
+	console.log('playForm');
+	event.preventDefault();
 
-function playForm() {
-	 e.preventDefault();
-	
-	let quizCode = document.getElementById("quizCode");
-	let nickname = document.getElementById("nickname");
-	let rememberNickname = document.getElementById("rememberNickname");
+	const quizCode = quizCodeInput.value;
+	const nickname = nicknameInput.value;
+	const rememberNickname = rememberNicknameCheckBox.checked;
 
+	const data = $('#playForm').serialize();
+	console.log('data:', data);
+	console.log('quizCode:', quizCode);
+	console.log('nickname:', nickname);
+	console.log('rememberNickname:', rememberNickname);
 
-	let request = $.ajax({
-		url: "ClientLogin",
-		type: "POST",
-		data: 
-		{ 
+	const request = $.ajax({
+		url: "./clientLogin",
+		type: "GET",
+		data:
+		{
 			quizCode: quizCode,
 			nickname: nickname,
-			rememberNickname: rememberNickname 
+			rememberNickname: rememberNickname
 		},
 		contentType: "application/json",
-		dataType: "appication/json"
+		dataType: "text"
 	});
 	
+	request.then(function(msg) {
+		console.log('then:', msg);
+		if(msg == 1) {
+			const urlParams = new URLSearchParams(window.location.search);
+
+			urlParams.set('nickname', nickname);
+			urlParams.set('quizCode', quizCode);
+			window.location.search = urlParams;
+			window.location.href = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'clientQuiz';
+		} else if(msg == 0) {
+			console.log('msg == 0');
+			quizCodeInput.placeholder = 'Invalid Quiz Code'
+			quizCodeInput.value = ''
+		} else {
+			console.log("shouldn't happen");
+		}
+	})
+
 	request.done(function(msg) {
-//		$("#log").html(msg);
-		console.log(msg);
+		console.log('done:', msg);
 	});
 
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
 	});
-}
+})
 
-$(document).on("submit", "#loginForm", function(event) {
-    let $form = $(this);
+$('#loginBtn').click(function(event) {
+	event.preventDefault();
+	console.log("loginBtn clicked");
+	const data = $('#loginForm').serialize();
+	console.log('data:', data);
+	$.ajax({
+		url: './adminLogin',
+		type: 'POST',
+		dataType: 'json',
+		data: data,
+		success: function(data) {
+			//					location.url = './admin/index';
+			window.location.href = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'admin/index';
+			console.log("data: ", data);
+			// ... do something with the data...
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.error("XMHttpRequest:", XMLHttpRequest);
+			console.error("textStatus:", textStatus);
+			console.error("errorThrown:", errorThrown);
+		}
 
-    $.post($form.attr("action"), $form.serialize(), function(response) {
-	
-		console.log(response);
-		if(response.success !== "true"){
-//			console.log(response.login);
-		}
-		else if(response.success === "true"){
-			window.location.replace("admin/index");
-		}
-		else{
-//			console.log(response);
-		}
-    });
-
-    event.preventDefault(); // Important! Prevents submitting the form.
+	});
 });
 
-function loginForm(event) {
-	console.log("loginForm");
-//	e.preventDefault();
-	
-//	let username = document.getElementById("loginUsername");
-//	let password = document.getElementById("loginPassword");
-//	let rememberMe = document.getElementById("rememberMe");
+//$(document).on("submit", "#loginForm", function(event) {
+//	console.log("loginForm2");
+//    let $form = $(this);
+//    
+//    const username = document.getElementById("loginUsername").value;
+//	const password = document.getElementById("loginPassword").value;
+//	const rememberMe = document.getElementById("rememberMe").value;
+//	
+//	console.log("username: ", username);
+//	console.log("password: ", password);
+//	console.log("rememberMe: ", rememberMe);
+//
+//
+//	let request = $.ajax({
+//		url: "AdminLogin",
+//		type: "POST",
+//		data: { 
+//			username: username,
+//			password: password,
+//			rememberMe: rememberMe 
+//		},
+//		contentType: "application/json",
+//		dataType: "application/json"
+//	});
+//
+//	request.done(function(msg) {
+//		console.log(msg.success);
+//		if(msg.success !== "true")
+//		{
+//			console.log(msg.login);
+//		}
+////		$("#log").html(msg);
+//	});
+//
+//	request.fail(function(jqXHR, textStatus) {
+//		alert("Request failed: " + textStatus);
+//	});
+//	
+//	request.finally(function()
+//	{
+//		console.log("finally Login");
+//	});
+//
+//    $.post($form.attr("action"), $form.serialize(), function(response) {
+//	
+//		console.log(response);
+//		if(response.success !== "true"){
+//			console.log("!true");
+////			console.log(response.login);
+//		}
+//		else if(response.success === "true"){
+//			console.log("true");
+////			window.location.assign("/adminsndex");
+//			console.log("Before: ");
+//			console.log(location.href);
+//			location.href = './projekat/admin/index';
+//			console.log("After: ");
+//			console.log(location.href);
+////			window.location.href = "/admin/index";
+//		}
+//		else{
+//			console.log("why?");
+////			console.log(response);
+//		}
+//    });
+//
+//    event.preventDefault(); // Important! Prevents submitting the form.
+//});
 
+//function loginForm(event) {
+//	console.log("loginForm1");
+////	e.preventDefault();
+//	
+//	const username = document.getElementById("loginUsername").value;
+//	const password = document.getElementById("loginPassword").value;
+//	const rememberMe = document.getElementById("rememberMe").value;
+//	
+//	console.log("username: ", username);
+//	console.log("password: ", password);
+//	console.log("rememberMe: ", rememberMe);
+//
+//
+//	let request = $.ajax({
+//		url: "AdminLogin",
+//		type: "POST",
+//		data: { 
+//			username: username,
+//			password: password,
+//			rememberMe: rememberMe 
+//		},
+//		contentType: "application/json",
+//		dataType: "application/json"
+//	});
+//
+//	request.done(function(msg) {
+//		console.log(msg.success);
+//		if(msg.success !== "true")
+//		{
+//			console.log(msg.login);
+//		}
+////		$("#log").html(msg);
+//	});
+//
+//	request.fail(function(jqXHR, textStatus) {
+//		alert("Request failed: " + textStatus);
+//	});
+//	
+//	request.finally(function()
+//	{
+//		console.log("finally Login");
+//	});	
+//}
 
-	let request = $.ajax({
-		url: "AdminLogin",
-		type: "POST",
-		data: { 
-			username: username,
-			password: password,
-			rememberMe: rememberMe 
-		},
-		contentType: "application/json",
-		dataType: "application/json"
-	});
-
-	request.done(function(msg) {
-		console.log(msg.success);
-		if(msg.success !== "true")
-		{
-			console.log(msg.login);
-		}
-//		$("#log").html(msg);
-	});
-
-	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
-	});
-	
-	reuest.finally(function()
-	{
-		console.log("finally Login");
-	});
-	
-}
-
-function signUpForm() {
+function signUpForm(event) {
+	console.log('signUpForm');
 	event.preventDefault();
-	
-	let password = document.getElementById("registerPassword");
-	let passwordConfirm = document.getElementById("registerConfirmPassword");
-	
-	if(password !== passwordConfirm)
-	{
+
+	const password = document.getElementById("registerPassword");
+	const passwordConfirm = document.getElementById("registerConfirmPassword");
+
+	if (password !== passwordConfirm) {
 		//
 		return;
 	}
-	
-	let username = document.getElementById("registerUsername");
-	
+
+	const username = document.getElementById("registerUsername");
+
 	// check if such username in dbs
-	
-	let email = document.getElementById("registerEmail"); // check if email is email
-	
-	let TOS = document.getElementById("TOS"); // check if TOS is true
+
+	const email = document.getElementById("registerEmail"); // check if email is email
+
+	const TOS = document.getElementById("TOS"); // check if TOS is true
 
 
-	let request = $.ajax({
-		url: "AdminSignUp",
+	const request = $.ajax({
+		url: "./adminSignUp",
 		type: "POST",
-		data: 
-		{ 
+		data:
+		{
 			username: username,
 			password: password,
-			email: email 
+			email: email
 		},
 		contentType: "application/json",
 		dataType: "application/json"
 	});
-	
+
 	request.done(function(msg) {
 		$("#log").html(msg);
+		console.log('msg:', msg);
 	});
 
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
 	});
+}
+
+if (typeOfForm === 'client') {
+	playAnimation();
+} else if (typeOfForm === 'admin') {
+	loginAnimation();
+} else {
+	console.log('typeof typeOfForm:', typeof typeOfForm);
 }
 
 

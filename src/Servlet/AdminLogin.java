@@ -41,29 +41,25 @@ public class AdminLogin extends HttpServlet {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-//		request.setAttribute("name", "Hussein Terek");
+
 		
-		
-		if (request.getParameter("logout") != null) 
+		Boolean logout = Boolean.valueOf(request.getParameter("logout"));
+		if (logout != null && logout.equals(true)) 
 		{
             request.getSession().invalidate();
         }
 		
 		HttpSession session = request.getSession(false);
 		
-		
 		if(session != null)
 		{
 			Boolean loggedIn = (Boolean) session.getAttribute("loggedIn");
 			if(loggedIn != null && loggedIn.equals(true))
 			{
-                response.sendRedirect("admin/index");
-
-//				request.getRequestDispatcher("adminIndex.jsp").forward(request, response);
+                response.sendRedirect("./admin/index");
 			}
 		}
-		
-//        response.sendRedirect("/adminLogin");
+		request.setAttribute("typeOfForm", "admin");
 		request.getRequestDispatcher("doubleLogin.jsp").include(request, response);
 	}
 
@@ -81,11 +77,13 @@ public class AdminLogin extends HttpServlet {
 //        boolean flag = false;  
 
         if (username == null || username.isEmpty()) {
+        	System.out.println("Username is null/empty");
             messages.put("username", "Please enter a username");
     		messages.put("success", "false");
         }
 
         if (password == null || password.isEmpty()) {
+        	System.out.println("Password is null/empty");
             messages.put("password", "Please enter a password");
     		messages.put("success", "false");
         }
@@ -94,32 +92,42 @@ public class AdminLogin extends HttpServlet {
             User user = userService.authenticate(username, password);
             if (user != null) {
                 if (user.getRole() == 1 || user.getRole() == 2) {
+                	System.out.println("Successful login");
             		HttpSession session = request.getSession(true);
 
                     session.setAttribute("user", user);
+                    session.setAttribute("username", user.getUsername());
             		session.setAttribute("loggedIn", true);
-//                    response.sendRedirect("/admin/index");
+            		session.setAttribute("role", user.getRole());
+//                    response.sendRedirect("./admin/index");
 //            		flag = true;
             		messages.put("success", "true");
                 } else {
+                	System.out.println("Pending admin can't login, yet");
             		messages.put("success", "false");
                     messages.put("login", "You are not admin. Only admin can login to admin panel.");
                 }
             } else {
+            	System.out.println("User wasn't found in db");
         		messages.put("success", "false");
                 messages.put("login", "Unknown user, please try again");
             }
         }
-//        request.setAttribute("messages", messages);
+        request.setAttribute("messages", messages);
 //        request.getRequestDispatcher("/doubleLogin.jsp").include(request, response);
-		
         String json = new Gson().toJson(messages);
-        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
 		
+//        String json = new Gson().toJson(messages);
+        
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().write(json);
+		
 //		request.getParameter("userToRemove");
+		System.out.println("doPost AdminLogin End");
 	}
 
 }

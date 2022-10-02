@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html" 
+<%@ page language="java" contentType="text/html"
 	import="Model.*, service.*, java.util.*, dao.*, javax.servlet.http.HttpServletRequest, java.lang.Math"%>
 <html lang="en">
 <head>
@@ -6,34 +6,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-<!--     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script> -->
+<link rel="stylesheet" href="../css/all.min.css" />
+<link rel="stylesheet" href="../css/bootstrap.min.css" />
+<script src="../scripts/jquery-3.6.1.min.js"></script>
+<script src="../scripts/bootstrap.min.js"></script>
+<!-- <script src="../scripts/popper.min.js"></script> -->
 <link rel="stylesheet" href="../css/editQuiz.css">
 <!-- <link rel="stylesheet" href="../css/center.css" /> -->
 <script src="../scripts/editQuiz.js" defer></script>
-    
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css'>
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js'></script>
 
-<link rel="stylesheet" href="../css/styles.css">
+<!-- <link rel="stylesheet" href="../css/styles.css"> -->
 <script src="../scripts/dragNDrop.js" defer></script>
-
-<!-- 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
-<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script> -->
-<!-- <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
-<!-- <link rel="stylesheet" href="../css/expandableTable.css"> -->
-<!-- <script src="../scripts/expandableTable.js" defer></script> -->
-
-<!-- <link rel="stylesheet" href="../css/bootstrap.css"> -->
-<!-- <link rel="stylesheet" href="../css/font-awesome.css"> -->
-
-<!-- <script src="../scripts/jquery.min.js" defer></script> -->
-<!-- <script src="../scripts/bootstrap.js"></script> -->
-<!-- <script src="../scripts/jquery.tabledit.min.js"></script> -->
-<!-- <script src="../scripts/adminQuizzes.js"></script> -->
-
-
 </head>
 <body>
 	<%
@@ -48,7 +31,6 @@
 			<img alt="" src="../imgs/quiz.png">
 			<h2>RWAQuiz</h2>
 		</div>
-
 		<div class="items">
 			<li><i class="fad fa-chart-pie-alt"></i><a href="index">Dashboard</a></li>
 			<li><i class="fas fa-th-large"></i><a href="quizzes">Quizzes</a></li>
@@ -68,42 +50,149 @@
 						placeholder="Search">
 				</div>
 			</div>
-
 			<div class="profile">
 				<i class="far fa-bell"></i> <img alt="" src="../imgs/1.jpg">
 			</div>
 		</div>
-
-		<div class='container' style='margin-top: 100px;'>
-			<div class='row'
-				style='border: 1px darkgrey solid; border-radius: 10px; width: 50%; margin: 0 auto; padding: 20px;'>
-				<div class='col-sm-12'>
-					<h2 class='myclass'>Modify Quiz</h2>
-					<form action='quizEdit' method='post'
-						enctype='multipart/form-data'>
-						<div class='form-group'>
-							<label>Quiz Title</label> <input type='text'
-								class='form-control' name='id'
-								value='<%=quiz.getTitle()%>'>
-						</div>
-						<div class='form-group'>
-							<label>Quiz Description</label> <input type='text' class='form-control'
-								name='name' value='<%=quiz.getDescription()%>'>
-						</div>
-						
-						<div class='form-group'>
-							<label>Photo</label> <br /> <img width='120' height='90'
-								src='../<%=quiz.getImageUrl()%>' class='portrait' /> <input type='file'
-								class='form-control' name='file' placeholder='Enter photo'>
-						</div>
-						<button type='submit' class='btn btn-primary'>Save</button>
-						<button type='reset' class='btn btn-primary' onclick=
-							"location.href='quizzes'">Cancel</button>
-					</form>
+		
+		<h3 class="i-name">Questions</h3>
+		<div class="values">
+			<div class="val-box">
+				<i class="fa fa-question-circle" aria-hidden="true"></i>
+				<div>
+					<h3 id="quizzes"><%=quiz.getQuestions().size()%></h3>
+					<span>Questions</span>
 				</div>
 			</div>
 		</div>
 
+		<div class="modal" tabindex="-1" role="dialog" id="delete-question">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Delete question</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close"
+							onclick=" document.getElementById('delete-question').style.display = 'none'">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>Do you want to delete this question?</p>
+						<div>
+							<label
+								class="bg-light border border-danger text-danger text-center w-100 p-2 mt-5 rounded"
+								style="display: none;" id="label-delete">You cannot
+								delete this question!</label>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							id="delete-question-btn" onclick="deleteQuestion(this.value)">
+							Yes</button>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal"
+							onclick="document.getElementById('delete-question').style.display = 'none'">No
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" tabindex="-1" role="dialog" id="add-question">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Add question</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close"
+							onclick='document.getElementById("add-question").style.display = "none"'>
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body mbody" id="add-question-body">
+						<form method="POST" id="add">
+							<div class="form-group">
+								<label for="add-title">Title</label>
+								<input placeholder="Title" class="form-control mb-3"
+								name="add-title" id="add-title" required />
+							</div>
+							<div class="form-group">
+								<label for="add-score">Score</label><input type="number"
+								placeholder="Score" class="form-control mb-3" name="add-score"
+								id="add-score" required />
+							</div>
+							<div class="form-group">
+							 	<label for="add-time">Time</label> <input type="number"
+								placeholder="Time in seconds" class="form-control mb-3"
+								name="add-time" id="add-time" required />
+							</div>	
+							<div style="margin-top: 20px; text-align: right">
+								<button type="submit" class="btn submit btn-default pull-right"
+									id="add-question-submit">Save</button>
+							</div>
+							<div>
+                        		<label class="bg-light border border-danger text-danger text-center w-100 p-2 mt-5 rounded"
+                               style="display: none;" id="label-time-add-lower">Time to answer at the very least 15 seconds</label>
+                           	</div>
+                           	<div>
+                        		<label class="bg-light border border-danger text-danger text-center w-100 p-2 mt-5 rounded"
+                               style="display: none;" id="label-time-add-higher">Time to answer must not be longer than a minute</label>
+                           	</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" tabindex="-1" role="dialog" id="edit-question">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Edit question</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body mbody" id="edit-question-body">
+						<form method="POST" id="edit">
+							<div class="form-group">
+							<label for="edit-title">Title</label>
+							<input placeholder="Title" class="form-control mb-3"
+								name="edit-title" id="edit-title" required /> 
+							</div>
+							<div class="form-group">
+								<label for="edit-score">Score</label>
+								<input type="number" placeholder="Score" class="form-control mb-3" name="edit-score" id="edit-score" required />
+							</div>
+							<div class="form-group">
+							<label for="edit-time">Time in seconds</label>
+							<input
+								type="number" placeholder="Time in seconds"
+								class="form-control mb-3" name="edit-time" id="edit-time"
+								required />
+							</div>
+								<input style="display: none;" id="edit-id"
+								name="edit-id" />
+							<button type="submit" class="btn d btn-default pull-right"
+								id="edit-question-submit">Save</button>
+								
+							<div>
+                        		<label class="bg-light border border-danger text-danger text-center w-100 p-2 mt-5 rounded"
+                               style="display: none;" id="label-time-edit-lower">Time to answer at the very least 15 seconds</label>
+                           	</div>
+                           	<div>
+                        		<label class="bg-light border border-danger text-danger text-center w-100 p-2 mt-5 rounded"
+                               style="display: none;" id="label-time-edit-higher">Time to answer must not be longer than a minute</label>
+                           	</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="board">
 			<table width="100%">
 				<thead>
@@ -112,20 +201,21 @@
 						<td>Question</td>
 						<td>Time</td>
 						<td>Points</td>
-						<td></td>
+						<td class="edit" onclick="document.getElementById('add-question').style.display = 'block'">Add Question</td>
 					</tr>
 				</thead>
 				<tbody id="kontejner" class="container">
 					<%
-						List<Question> questionList = quiz.getQuestions();
-						for (Integer i = 0; i < questionList.size(); ++i) {
+					List<Question> questionList = quiz.getQuestions();
+					System.out.println("questionList.size(): " + questionList.size());
+					for (Integer i = 0; i < questionList.size(); ++i) {
 					%>
 					<tr class="draggable" draggable="true">
 						<td class="people">
 							<div class="people-de">
-								<h5><%=questionList.get(i).getId() %></h5>
+								<h5><%=questionList.get(i).getOrdinalNumber()%></h5>
 							</div>
-						</td>						
+						</td>
 						<td class="people-des">
 							<h5><%=questionList.get(i).getTitle()%></h5>
 						</td>
@@ -135,78 +225,35 @@
 						<td class="role">
 							<h5><%=questionList.get(i).getScore()%></h5>
 						</td>
-						
+						<td class="hidden"><%=questionList.get(i).getId()%></td>
 						<td class="edit">
-							<a href="#">Edit</a>
+							<button class="btn bg-transparent edit-btn" data-toggle="modal"
+								data-target="#edit-question">
+								<i class="fa fa-edit"></i>
+							</button>
+							<button class="btn bg-transparent"
+								value=<%=questionList.get(i).getId()%>
+								onclick="openDeleteModal(this.value)">
+								<i class="fa fa-trash"> </i>
+							</button>
+							<button class="btn bg-transparent"
+								value="<%=questionList.get(i).getId()%>"
+								onclick="goToLocation(this.value)">
+								<i class="fa fa-list"> </i>
+							</button>
+							<%--  <a href="editQuestion?id=<%=questionList.get(i).getId()%>">Edit</a>  --%>
+							<%-- <a href="deleteQuestion?id=<%=questionList.get(i).getId()%>">Delete</a> --%>
 						</td>
 					</tr>
-				<%
-				}
- 				%>
+					<%
+					}
+					%>
 				</tbody>
 			</table>
+		</div>
 	</section>
-<!-- 					<tr> -->
-<!-- 						<td colspan="5"> -->
-<!-- 							<div class="container" style="margin-top: 35px"> -->
-<!-- 								<h4>Questions</h4> -->
-<!-- 								<table id="tabledit" class="table table-bordered table-striped"> -->
-<!-- 									<thead> -->
-<!-- 										<tr> -->
-<!-- 											<th>ID</th> -->
-<!-- 											<th>Question</th> -->
-<!-- 											<th>Time To Answer</th> -->
-<!-- 											<th>Score</th> -->
-<!-- <!-- 											<th>Phone</th> --> 
-<!-- <!-- 											<th>Address</th> -->
-<!-- 										</tr> -->
-<!-- 									</thead> -->
-
-<!-- 									<tbody> -->
-<!-- 										<tr id="row1"> -->
-<!-- 											<td name="id">1</td> -->
-<!-- 											<td name="question">Pitanje je</td> -->
-<!-- 											<td name="timeToAnswer">20</td> -->
-<!-- 											<td name="score">10</td> -->
-<!-- <!-- 											<th>Phone1</th> -->
-<!-- <!-- 											<th>Address1</th> -->
-<!-- 										</tr> -->
-<!-- 									</tbody> -->
-<!-- 								</table> -->
-<!-- 							</div> -->
-<!-- 						</td> --
-<!-- 					</tr> -->
-
-						<!-- 						<td colspan="5"><h4>Additional information</h4> -->
-<!-- 							<ul> -->
-<!-- 								<li><a href="http://en.wikipedia.org/wiki/Usa">USA on -->
-<!-- 										Wikipedia</a></li> -->
-<!-- 								<li><a href="http://nationalatlas.gov/">National Atlas -->
-<!-- 										of the United States</a></li> -->
-<!-- 								<li><a -->
-<!-- 									href="http://www.nationalcenter.org/HistoricalDocuments.html">Historical -->
-<!-- 										Documents</a></li> -->
-<!-- 							</ul></td> -->
-<!-- 					<tr> -->
-<!-- 						<td>United Kingdom</td> -->
-<!-- 						<td>61,612,300</td> -->
-<!-- 						<td>244,820 km2</td> -->
-<!-- 						<td>English</td> -->
-<!-- 					</tr> -->
-<!-- 					<tr> -->
-<!-- 						<td colspan="5"><h4>Additional information</h4> -->
-<!-- 							<ul> -->
-<!-- 								<li><a href="http://en.wikipedia.org/wiki/United_kingdom">UK -->
-<!-- 										on Wikipedia</a></li> -->
-<!-- 								<li><a href="http://www.visitbritain.com/">Official -->
-<!-- 										tourist guide to Britain</a></li> -->
-<!-- 								<li><a -->
-<!-- 									href="http://www.statistics.gov.uk/StatBase/Product.asp?vlnk=5703">Official -->
-<!-- 										Yearbook of the United Kingdom</a></li> -->
-<!-- 							</ul></td> -->
-<!-- 					</tr> -->
-
-
-
+	<script>
+		const quizId = '<%=request.getParameter("id").toString()%>'
+	</script>
 </body>
 </html>

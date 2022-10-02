@@ -181,4 +181,26 @@
     <servlet-name>editQuizJsp</servlet-name>
     <url-pattern>/admin/editQuiz.jsp</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>adminQuizJsp</servlet-name>
+    <jsp-file>/adminQuiz.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+    <servlet-name>adminQuizJsp</servlet-name>
+    <url-pattern>/admin/adminQuiz.jsp</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>editQuestionJsp</servlet-name>
+    <jsp-file>/editQuestion.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+    <servlet-name>editQuestionJsp</servlet-name>
+    <url-pattern>/admin/editQuestion.jsp</url-pattern>
+	</servlet-mapping>
+	
+	
 </web-app>

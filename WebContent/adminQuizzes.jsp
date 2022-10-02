@@ -1,36 +1,33 @@
-<%@ page language="java" contentType="text/html" 
-	import="Model.Quiz, service.QuizService, java.util.*, dao.QuizDao, javax.servlet.http.HttpServletRequest, java.lang.Math"%>
+<%@ page language="java" contentType="text/html"
+	import="Model.User, Model.Quiz, service.UserService, service.QuizService, java.util.*, dao.QuizDao, dao.UserDao, javax.servlet.http.HttpServletRequest, java.lang.Math"%>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-<!--     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script> -->
+<link rel="stylesheet" href="../css/all.min.css" />
+<link rel="stylesheet" href="../css/bootstrap.min.css" />
+<script src="../scripts/jquery-3.6.1.min.js"></script>
+<!-- <script src="../scripts/popper.min.js"></script> -->
 <link rel="stylesheet" href="../css/adminQuizzes.css">
-<!--     <script src="../scripts/adminIndex.js" defer></script> -->
-
-<!-- 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
-<script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
-<!-- <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
-<!-- <link rel="stylesheet" href="../css/expandableTable.css"> -->
-<!-- <script src="../scripts/expandableTable.js" defer></script> -->
-
-<!-- <link rel="stylesheet" href="../css/bootstrap.css"> -->
-<!-- <link rel="stylesheet" href="../css/font-awesome.css"> -->
-
-<!-- <script src="../scripts/jquery.min.js" defer></script> -->
-<!-- <script src="../scripts/bootstrap.js"></script> -->
-<!-- <script src="../scripts/jquery.tabledit.min.js"></script> -->
-<!-- <script src="../scripts/adminQuizzes.js"></script> -->
-
-
+<script src="../scripts/bootstrap.min.js"></script>
+<script src="../scripts/adminQuizzes.js" defer></script>
 </head>
 <body>
 	<%
 	QuizService quizService = new QuizService(new QuizDao());
-	ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
+	UserService userService = new UserService(new UserDao());
+	User user = (User) session.getAttribute("user");
+	if(user == null) {
+		String username = (String) session.getAttribute("username");
+		if(username == null){
+			System.out.println("no username");
+		} else {
+			System.out.println(username);
+		}
+		user = userService.findByUsername(username);
+	}
 	%>
 	<section id="menu">
 		<div class="logo">
@@ -71,6 +68,110 @@
 					<h3 id="quizzes"><%=quizService.getNumberOfQuizzes()%></h3>
 					<span>Quizzes</span>
 				</div>
+			</div>
+		</div>
+
+		<div class="modal" tabindex="-1" role="dialog" id="delete-quiz">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Delete quiz</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close"
+							onclick=" document.getElementById('delete-quiz').style.display = 'none'">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>Do you want to delete this quiz?</p>
+						<div>
+							<label
+								class="bg-light border border-danger text-danger text-center w-100 p-2 mt-5 rounded"
+								style="display: none;" id="label-delete">You cannot
+								delete this quiz!</label>
+						</div>
+
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							id="delete-quiz-btn" onclick="deleteQuiz(this.value)">
+							Yes</button>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal"
+							onclick="document.getElementById('delete-quiz').style.display = 'none'">No
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" tabindex="-1" role="dialog" id="edit-quiz">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Edit quiz</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body mbody" id="edit-quiz-body"
+						enctype="multipart/form-data">
+						<form method="POST" id="edit">
+							<div class="form-group">
+								<label for="edit-title">Title</label> <input placeholder="Title"
+								class="form-control mb-3" for="edit-title" name="edit-title"
+								id="edit-title" required />
+							</div>
+							<div class="form-group">
+								<label for="edit-description">Description</label>
+								<textarea class="form-control" id="edit-description" rows="3"></textarea>
+							</div>
+							<div class="form-group">
+								<input type="file" name="edit-image-file" id="edit-image-file" />
+								<input style="display: none;" id="edit-id" name="edit-id" />
+							</div>
+							<button type="submit" class="btn d btn-default pull-right"
+								id="edit-quiz-submit">Save</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" tabindex="-1" role="dialog" id="add-quiz">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Add quiz</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close"
+							onclick='document.getElementById("add-quiz").style.display = "none"'>
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body mbody" id="add-quiz-body"
+						enctype="multipart/form-data">
+						<form method="POST" id="add">
+							<label for="add-title">Title</label> <input placeholder="Title"
+								class="form-control mb-3" for="add-title" name="add-title"
+								id="add-title" required />
+							<div class="form-group">
+								<label for="add-description">Description</label>
+								<textarea class="form-control" id="add-description" rows="3"></textarea>
+							</div>
+							<input type="file" name="add-image-file" id="add-image-file" />
+							<div style="margin-top: 20px; text-align: right">
+								<button type="submit" class="btn submit btn-default pull-right"
+									id="add-quiz-submit">Save</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="board">
@@ -81,39 +182,36 @@
 						<td>Creator</td>
 						<td>Description</td>
 						<td>Quiz Code</td>
-						<td></td>
+						<td class="edit" onclick="document.getElementById('add-quiz').style.display = 'block'">Create</td>
 					</tr>
 				</thead>
 				<tbody>
-				<%
+					<%
 					String pageStr = request.getParameter("page");
 					Integer pageNum;
-					if(pageStr != null)
+					if (pageStr != null)
 						pageNum = Integer.valueOf(pageStr);
-					else
-					{
+					else {
 						pageNum = new Integer(1);
-// 						session.setAttribute("page", pageNum.intValue());
-// 						session.getAttribute("username")
+						// 						session.setAttribute("page", pageNum.intValue());
+						// 						session.getAttribute("username")
 					}
-					if(pageNum < 1)
+					if (pageNum < 1)
 						pageNum = 1;
 					int start = (pageNum - 1) * 5;
 					int end = start + 5;
 					List<Quiz> quizList = quizService.getSomeQuizzes(5, start);
 					for (Integer i = 0; i < quizList.size(); ++i) {
-				%>
+					%>
 					<tr>
-						<td class="people">
-							<img alt="" src="../<%=quizList.get(i).getImageUrl() %>">
+						<td class="people"><img alt=""
+							src="../<%=quizList.get(i).getImageUrl()%>">
 							<div class="people-de">
-								<h5><%=quizList.get(i).getTitle() %></h5>
-<!-- 								<p>3495</p> -->
-							</div>
-						</td>						
+								<h5><%=quizList.get(i).getTitle()%></h5>
+								<!-- 								<p>3495</p> -->
+							</div></td>
 						<td class="people-des">
-							<h5><%=quizList.get(i).getOwner().getUsername()%></h5>
-<!-- 							<p>arijankaric@yahoo.com</p> -->
+							<h5><%=quizList.get(i).getOwner().getUsername()%></h5> <!-- 							<p>arijankaric@yahoo.com</p> -->
 						</td>
 						<td class="role">
 							<p><%=quizList.get(i).getDescription()%></p>
@@ -121,92 +219,42 @@
 						<td class="notactive">
 							<p>Inactive</p>
 						</td>
-						
-						<td class="edit">
-							<a id="start" href="#">Start</a>
-							<a href="/projekat/admin/editQuiz?id=<%=quizList.get(i).getId()%>">Edit</a>
+						<td class="hidden"><%=quizList.get(i).getId()%></td>
+						<td class="td-icon">
+							<button class="btn bg-transparent"
+								value=<%=quizList.get(i).getId()%>
+								onclick="startQuiz(this.value)">
+								<i class="fa fa-play" aria-hidden="true"></i>
+							</button>
+							<button class="btn bg-transparent edit-btn" data-toggle="modal"
+								data-target="#edit-quiz">
+								<i class="fa fa-edit"></i>
+							</button>
+							<button class="btn bg-transparent"
+								value=<%=quizList.get(i).getId()%>
+								onclick="openDeleteModal(this.value)">
+								<i class="fa fa-trash"> </i>
+							</button>
+							<button class="btn bg-transparent"
+								value=<%=quizList.get(i).getId()%>
+								onclick="goToLocation(this.value)">
+								<i class="fa fa-list"> </i>
+							</button>
 						</td>
 					</tr>
-				<%
-				}
-				%>
+					<%
+					}
+					%>
 				</tbody>
 			</table>
-			<div class="pagination">
-<!--   				<a href="#"s>&laquo;</a> -->
-  				<%
-  				int numOfPages = (int)Math.ceil((float)quizService.getNumberOfQuizzes()/ (float)5);
-  				for(int i = 1; i <= numOfPages; ++i){
-  					if(i == pageNum){
-  				%>
-  				<a href="#" class="active"><%=i%></a>
-  				<%}else{ %>
-  				<a name="<%=i%>" href="quizzes?page=<%=i %>"><%=i%></a>
-  				<%}} %>
-			</div>
 		</div>
 	</section>
-<!-- 					<tr> -->
-<!-- 						<td colspan="5"> -->
-<!-- 							<div class="container" style="margin-top: 35px"> -->
-<!-- 								<h4>Questions</h4> -->
-<!-- 								<table id="tabledit" class="table table-bordered table-striped"> -->
-<!-- 									<thead> -->
-<!-- 										<tr> -->
-<!-- 											<th>ID</th> -->
-<!-- 											<th>Question</th> -->
-<!-- 											<th>Time To Answer</th> -->
-<!-- 											<th>Score</th> -->
-<!-- <!-- 											<th>Phone</th> --> 
-<!-- <!-- 											<th>Address</th> -->
-<!-- 										</tr> -->
-<!-- 									</thead> -->
 
-<!-- 									<tbody> -->
-<!-- 										<tr id="row1"> -->
-<!-- 											<td name="id">1</td> -->
-<!-- 											<td name="question">Pitanje je</td> -->
-<!-- 											<td name="timeToAnswer">20</td> -->
-<!-- 											<td name="score">10</td> -->
-<!-- <!-- 											<th>Phone1</th> -->
-<!-- <!-- 											<th>Address1</th> -->
-<!-- 										</tr> -->
-<!-- 									</tbody> -->
-<!-- 								</table> -->
-<!-- 							</div> -->
-<!-- 						</td> --
-<!-- 					</tr> -->
-
-						<!-- 						<td colspan="5"><h4>Additional information</h4> -->
-<!-- 							<ul> -->
-<!-- 								<li><a href="http://en.wikipedia.org/wiki/Usa">USA on -->
-<!-- 										Wikipedia</a></li> -->
-<!-- 								<li><a href="http://nationalatlas.gov/">National Atlas -->
-<!-- 										of the United States</a></li> -->
-<!-- 								<li><a -->
-<!-- 									href="http://www.nationalcenter.org/HistoricalDocuments.html">Historical -->
-<!-- 										Documents</a></li> -->
-<!-- 							</ul></td> -->
-<!-- 					<tr> -->
-<!-- 						<td>United Kingdom</td> -->
-<!-- 						<td>61,612,300</td> -->
-<!-- 						<td>244,820 km2</td> -->
-<!-- 						<td>English</td> -->
-<!-- 					</tr> -->
-<!-- 					<tr> -->
-<!-- 						<td colspan="5"><h4>Additional information</h4> -->
-<!-- 							<ul> -->
-<!-- 								<li><a href="http://en.wikipedia.org/wiki/United_kingdom">UK -->
-<!-- 										on Wikipedia</a></li> -->
-<!-- 								<li><a href="http://www.visitbritain.com/">Official -->
-<!-- 										tourist guide to Britain</a></li> -->
-<!-- 								<li><a -->
-<!-- 									href="http://www.statistics.gov.uk/StatBase/Product.asp?vlnk=5703">Official -->
-<!-- 										Yearbook of the United Kingdom</a></li> -->
-<!-- 							</ul></td> -->
-<!-- 					</tr> -->
-
-
-
+	<script>
+		const currentUsername = '<%=user.getUsername()%>';
+		const currentRole =	<%=user.getRole()%>;
+		console.log('currentUsername: ' + currentUsername);
+		console.log('currentRole: ' + currentRole);
+	</script>
 </body>
 </html>

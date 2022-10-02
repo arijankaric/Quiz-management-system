@@ -19,7 +19,7 @@ import service.QuestionService;
 /**
  * Servlet implementation class UpdateQuestions
  */
-@WebServlet(name = "/UpdateQuestionServlet", urlPatterns = "/admin/updateQuestions")
+@WebServlet(name = "/UpdateQuestions", urlPatterns = "/admin/updateQuestions")
 public class UpdateQuestions extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     QuestionService questionService = new QuestionService(new QuestionDao());

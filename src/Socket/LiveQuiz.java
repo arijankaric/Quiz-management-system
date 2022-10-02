@@ -1,29 +1,30 @@
 package Socket;
 
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.websocket.Session;
 
 public class LiveQuiz {
-	private CopyOnWriteArraySet<Session> sessions;
+	private List<Session> sessions;
 	private int quizId;
 	
-	public CopyOnWriteArraySet<Session> getSessions() {
+	public List<Session> getSessions() {
 		return sessions;
 	}
 	
-	public void setSessions(CopyOnWriteArraySet<Session> sessions) {
+	public void setSessions(List<Session> sessions) {
 		this.sessions = sessions;
 	}
 	
 	public LiveQuiz() {
 		super();
-		sessions = new CopyOnWriteArraySet<Session>();
+		sessions = new ArrayList<Session>();
 	}
 	
 	public LiveQuiz(int quizId) {
 		super();
-		sessions = new CopyOnWriteArraySet<Session>();
+		sessions = new ArrayList<Session>();
 		this.quizId = quizId;
 	}
 

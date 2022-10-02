@@ -63,7 +63,6 @@ public class BootstrapApp {
                 if (user != null) {
                     quiz.setTitle(parts[0]);
                     quiz.setDescription(parts[1]);
-                    quiz.setActive(Boolean.parseBoolean(parts[2]));
                     quiz.setImageUrl(parts[3]);
                     quiz.setOwner(user);
                     quizService.createQuiz(quiz);
@@ -91,6 +90,7 @@ public class BootstrapApp {
                     question.setTimeToAnswer(Integer.parseInt(parts[2]));
                     question.setScore(Integer.parseInt(parts[3]));
                     question.setQuiz(quiz);
+                    question.setOrdinalNumber(Integer.parseInt(parts[4]));
                     questionService.createQuestion(question);
                 }
             }

@@ -4,13 +4,15 @@ import Model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
+
 import java.util.List;
 
 final public class UserDao extends AbstractDao {
     public UserDao() {
     }
 
-    
+    @Transactional
     public void insert(User user) {
         EntityManager em = getEMF().createEntityManager();
         em.getTransaction().begin();
@@ -39,6 +41,7 @@ final public class UserDao extends AbstractDao {
         Query q = em.createQuery("SELECT v FROM User v WHERE v.username = :username").setParameter("username", username);
         if (q.getResultList().size() == 0) return null;
         User user = (User) q.setMaxResults(1).getSingleResult();
+        em.refresh(user);
         em.close();
         return user;
     }
@@ -48,6 +51,7 @@ final public class UserDao extends AbstractDao {
         Query q = em.createQuery("SELECT v FROM User v WHERE v.id = :userId").setParameter("userId", userId);
         if (q.getResultList().size() == 0) return null;
         User user = (User) q.setMaxResults(1).getSingleResult();
+        em.refresh(user);
         em.close();
         return user;
     }
@@ -60,7 +64,8 @@ final public class UserDao extends AbstractDao {
         em.close();
         return userList;
     }
-
+    
+    @Transactional
     public void updateUser(String oldUserName, String username, String password, int role) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("UPDATE User u SET u.username = :username, u.password = :password, u.role = :role WHERE u.username = :oldUserName");
@@ -73,7 +78,22 @@ final public class UserDao extends AbstractDao {
         em.getTransaction().commit();
         em.close();
     }
-
+    
+    @Transactional
+    public void updateUser(int id, String username, String password, int role) {
+        EntityManager em = getEMF().createEntityManager();
+        Query q = em.createQuery("UPDATE User u SET u.username = :username, u.password = :password, u.role = :role WHERE u.id = :id");
+        q.setParameter("username", username);
+        q.setParameter("password", password);
+        q.setParameter("role", role);
+        q.setParameter("id", id);
+        em.getTransaction().begin();
+        q.executeUpdate();
+        em.getTransaction().commit();
+        em.close();
+    }
+    
+    @Transactional
     public void removeUser(String username) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("DELETE FROM User u WHERE u.username = :username");

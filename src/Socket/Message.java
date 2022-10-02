@@ -1,64 +1,68 @@
 package Socket;
 
 public class Message {
-//	private String userId;
-//	private String username;
-//	private String text;
-	private String quizCode;
-	private int quizId;
+	private int typeOfMessage;
+	private String text;
+	private int senderId; 
+	// -2 => server, 
+	// -1 => moderator, 
+	// -3 => clientWithoutAssignedId (client that is requesting/waiting for an id to be assigned to it by the server)
+	private String senderNickname; // null for server & moderator
 	
-	public int getQuizId() {
-		return quizId;
+	public int getTypeOfMessage() {
+		return typeOfMessage;
 	}
 
-	public void setQuizId(int quizId) {
-		this.quizId = quizId;
+	public void setTypeOfMessage(int typeOfMessage) {
+		this.typeOfMessage = typeOfMessage;
 	}
 
-	private Integer flag; 
-	// -1 => Client entered invalid quizCode
-	// 0 => newClient, 
-	// 1 => Admin Start Quiz, 
-	// 2 => Admin Disconnect in the middle of quiz (who's going to open questions?),
-
-	public Integer getFlag() {
-		return flag;
+	public String getText() {
+		return text;
 	}
 
-	public void setFlag(Integer flag) {
-		this.flag = flag;
+	public void setText(String text) {
+		this.text = text;
 	}
 
-	public String getQuizCode() {
-		return quizCode;
+	public int getSenderId() {
+		return senderId;
 	}
 
-	public void setQuizCode(String quizCode) {
-		this.quizCode = quizCode;
+	public void setSenderId(int senderId) {
+		this.senderId = senderId;
 	}
 
-//	public String getUserId() {
-//		return userId;
-//	}
-//	public void setUserId(String userId) {
-//		this.userId = userId;
-//	}
-//	public String getUsername() {
-//		return username;
-//	}
-//	public void setUsername(String username) {
-//		this.username = username;
-//	}
-//	public String getText() {
-//		return text;
-//	}
-//	public void setText(String text) {
-//		this.text = text;
-//	}
+	public String getSenderNickname() {
+		return senderNickname;
+	}
+
+	public void setSenderNickname(String senderNickname) {
+		this.senderNickname = senderNickname;
+	}
+
+	public Message() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	// -1 => inalidQuizCode(Client entered invalid quiz code)
+	// 0 => clientConnect, 
+	// 1 => adminStartQuiz, 
+	// 2 => adminDisconnect,
+	// 3 => clientDisconnect(broadcasting clientId)
+	// 4 => adminDeployQuiz
+	// 5 => updateClientScore
+	// 6 => nextQuestion
+	// 7 => everyoneFinished(everyoneSubmittedTheirAnswer)
+	// 8 => quizCode(sent from server to moderator)
+	// 9 => quizId(sent from server to client)
+	// 4 => clientDisconnect(broadcasting clientNickname)
+
+
 	@Override
 	public String toString() {
-//		return "Message [userId=" + userId + ", username=" + username + ", text=" + text + "]";
-		return "Message [quizCode=" + quizCode + "]";
+		return "Message [typeOfMessage=" + this.typeOfMessage + ", text=" + this.text + ", senderId=" + this.senderId + ", senderNickname=" + this.senderNickname + "]";
 
 	}
 }

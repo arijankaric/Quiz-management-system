@@ -9,7 +9,16 @@ public class Answer {
     private int id;
     private String title;
     private boolean isCorrect;
-    private Question question;
+    private transient Question question;
+    
+    public Answer() {
+    	super();
+    }
+    public Answer(String title, boolean correct, Question question) {
+    	this.title = title;
+    	this.isCorrect = correct;
+    	this.question = question;
+    }
 
     @Id
     @Column(name = "id", table = "answer", nullable = false)
@@ -22,7 +31,6 @@ public class Answer {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "title", table = "answer", nullable = false, length = -1)
     public String getTitle() {
         return title;
@@ -32,7 +40,6 @@ public class Answer {
         this.title = title;
     }
 
-    @Basic
     @Column(name = "is_correct", table = "answer", nullable = false)
     public boolean isCorrect() {
         return isCorrect;

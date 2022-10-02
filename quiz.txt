@@ -1,2 +1,2 @@
- servlet-s Quiz;test your knowledge about servlet-s;true;imgs/Servlet.jpg;arijan;
+ servlets Quiz;test your knowledge about servlet-s;true;imgs/Servlet.jpg;arijan;
  JavaScript Quiz;How good do you know JavaScript;true;imgs/JS.png;arijan;

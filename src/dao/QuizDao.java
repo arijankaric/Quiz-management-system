@@ -2,6 +2,8 @@ package dao;
 
 
 import Model.Quiz;
+import javax.transaction.Transactional;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,24 +17,13 @@ final public class QuizDao extends AbstractDao {
     public QuizDao() {
     }
 
+    @Transactional
     public void saveQuizToDB(Quiz quiz) {
         EntityManager em = getEMF().createEntityManager();
         em.getTransaction().begin();
         em.persist(quiz);
         em.getTransaction().commit();
         em.close();
-    }
-    
-    public List<Quiz> getQuizzesDefault() {
-        EntityManager em = getEMF().createEntityManager();
-//        em.clear();
-//      em.flush();
-
-        Query q = em.createQuery("SELECT v FROM Quiz v ORDER BY v.id", Quiz.class);
-//        q.setMaxResults(getNumberOfQuizzes().intValue()-1);
-        List<Quiz> quizList = q.getResultList();;
-        em.close();
-        return quizList;
     }
 
     public List<Quiz> getQuizzes() {
@@ -41,7 +32,6 @@ final public class QuizDao extends AbstractDao {
 //      em.flush();
 
         Query q = em.createQuery("SELECT v FROM Quiz v ORDER BY v.id", Quiz.class);
-        q.setMaxResults(getNumberOfQuizzes().intValue()-1);
         List<Quiz> quizList = q.getResultList();;
         em.close();
         return quizList;
@@ -56,35 +46,24 @@ final public class QuizDao extends AbstractDao {
     }
 
 	public List<Quiz> getSomeQuizzes(int numberOfQuizzes, int offset) {
-//		if(getNumberOfQuizzes() == 0)
-//			return new ArrayList<Quiz>();
-//		System.out.println("numberOfQuizzes: " + numberOfQuizzes);
-//		System.out.println("offset: " + offset);
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("SELECT u FROM Quiz u", Quiz.class);
-        Integer end = (int) (offset + numberOfQuizzes);
-        if(end >= getNumberOfQuizzes())
-        	numberOfQuizzes = Math.toIntExact(getNumberOfQuizzes()) - offset;
-        System.out.println("prije " + end + " " + offset + " " + numberOfQuizzes);
       @SuppressWarnings("unchecked")
         List<Quiz> quizzes = q.setMaxResults(numberOfQuizzes).setFirstResult(offset).getResultList();
-        System.out.println("poslije " + end);
         em.close();
         return quizzes;
     }
 
     public Quiz getQuizById(int id) {
-    	if(id == getNumberOfQuizzes())
-    		return null;
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("SELECT v FROM Quiz v WHERE v.id = :id").setParameter("id", id);
         if (q.getResultList().size() == 0) return null;
         Quiz quiz = (Quiz) q.getSingleResult();
+        em.refresh(quiz);
         em.close();
         return quiz;
     }
 
-    // This must remain true so others can work properly
     public Long getNumberOfQuizzes() {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("SELECT COUNT(v) FROM Quiz v");
@@ -102,7 +81,8 @@ final public class QuizDao extends AbstractDao {
         em.close();
         return quizzes;
     }
-
+    
+    @Transactional
     public void removeQuizById(int quizId) {
         EntityManager em = getEMF().createEntityManager();
         Query q = em.createQuery("DELETE FROM Quiz u WHERE u.id = :id");
@@ -113,12 +93,12 @@ final public class QuizDao extends AbstractDao {
         em.close();
     }
 
-    public void updateQuiz(String quizTitle, String quizDesc, String imageUrl, boolean isActive, int quizId) {
+    @Transactional
+    public void updateQuiz(String quizTitle, String quizDesc, String imageUrl, int quizId) {
         EntityManager em = getEMF().createEntityManager();
-        Query q = em.createQuery("UPDATE Quiz u SET u.title = :quizTitle, u.description = :quizDesc, u.active = :isActive, u.imageUrl = :imageUrl WHERE u.id = :quizId");
+        Query q = em.createQuery("UPDATE Quiz u SET u.title = :quizTitle, u.description = :quizDesc, u.imageUrl = :imageUrl WHERE u.id = :quizId");
         q.setParameter("quizTitle", quizTitle);
         q.setParameter("quizDesc", quizDesc);
-        q.setParameter("isActive", isActive);
         q.setParameter("imageUrl", imageUrl);
         q.setParameter("quizId", quizId);
         em.getTransaction().begin();

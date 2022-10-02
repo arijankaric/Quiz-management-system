@@ -24,12 +24,12 @@ public class AnswerService {
         if (newTitle.isBlank()) {
             answerDao.removeAnswerById(answerId);
         } else {
-            answerDao.updateAnswer(questionId, newTitle, newStatus, answerId);
+            answerDao.updateAnswer(newTitle, newStatus, answerId);
         }
     }
-
-    public void updateAnswer(String newTitle, boolean newStatus, int answerId, int questionId) {
-        answerDao.updateAnswer(questionId, newTitle, newStatus, answerId);
+    
+    public void updateAnswer(String newTitle, boolean newStatus, int answerId) {
+        answerDao.updateAnswer(newTitle, newStatus, answerId);
     }
 
     public void removeAnswerById(int answerId) {

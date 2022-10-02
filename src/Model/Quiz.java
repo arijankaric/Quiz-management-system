@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 @Table(name = "quiz", schema = "rwaquiz")
@@ -12,11 +13,20 @@ public class Quiz {
     private int id;
     private String title;
     private String description;
-    private boolean isActive;
     private String imageUrl;
-    private User owner;
-    private List<Question> questions = new ArrayList<>();
-    private List<Result> results = new ArrayList<>();
+    private transient User owner;
+    private List<Question> questions = new ArrayList<Question>();
+    
+    public Quiz(String title, String description, String imageUrl, User user) {
+    	this.title = title;
+    	this.description = description;
+    	this.imageUrl = imageUrl;
+    	this.owner = user;
+    }
+    
+    public Quiz() {
+    	super();
+    }
 
     @Id
     @Column(name = "id", table = "quiz", nullable = false)
@@ -50,16 +60,6 @@ public class Quiz {
     }
 
     @Basic
-    @Column(name = "is_active", table = "quiz", nullable = false)
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    @Basic
     @Column(name = "image_url", table = "quiz", nullable = false, length = -1)
     public String getImageUrl() {
         return imageUrl;
@@ -77,7 +77,6 @@ public class Quiz {
         Quiz quiz = (Quiz) o;
 
         if (id != quiz.id) return false;
-        if (isActive != quiz.isActive) return false;
         if (!Objects.equals(title, quiz.title)) return false;
         if (!Objects.equals(description, quiz.description)) return false;
         return Objects.equals(imageUrl, quiz.imageUrl);
@@ -88,14 +87,13 @@ public class Quiz {
         int result = id;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (isActive ? 1 : 0);
         result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<Question> getQuestions() {
-        questions.sort(Comparator.comparingInt(Question::getId));
+        questions.sort(Comparator.comparingInt(Question::getOrdinalNumber));
         return questions;
     }
 
@@ -112,28 +110,28 @@ public class Quiz {
     public void setOwner(User owner) {
         this.owner = owner;
     }
-
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    public List<Result> getResults() {
-        results.sort(Comparator.comparingInt(Result::getId));
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
-    }
+    
+    public static String removeLastCharOptional(String s) {
+        return Optional.ofNullable(s)
+          .filter(str -> str.length() != 0)
+          .map(str -> str.substring(0, str.length() - 1))
+          .orElse(s);
+        }
 
     @Override
     public String toString() {
-        results.sort(Comparator.comparingInt(Result::getId));
-        questions.sort(Comparator.comparingInt(Question::getId));
+        questions.sort(Comparator.comparingInt(Question::getOrdinalNumber));
+        String questionsStr = new String("[");
+        for (int i = 0; i < questions.size(); i++) {
+            questionsStr += questions.get(i) + ","; 
+        }
+        if(questions.size() != 0)
+        	questionsStr = removeLastCharOptional(questionsStr);
+        questionsStr += "]";
         return "{\"id\":" + id + "," +
                 "\"title\":\"" + title + "\"," +
                 "\"description\":\"" + description + "\"," +
                 "\"imageUrl\":\"" + imageUrl + "\"," +
-                "\"questions\":" + questions + "," +
-                "\"results\":" + results + "," +
-                "\"active\":" + isActive + "}";
+                "\"questions\":" + questionsStr + "}";
     }
-
 }

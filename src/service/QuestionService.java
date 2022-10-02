@@ -31,6 +31,10 @@ public class QuestionService {
                                int questionScore) {
         questionDao.updateQuestion(questionId, questionTitle, questionTimeToAnswer, questionScore);
     }
+    
+    public void updateQuestion(int id, String title, int timeToAnswer, int score, int ordinalNumber) {
+    	questionDao.updateQuestion(id, title, timeToAnswer, score, ordinalNumber);
+    }
 
     public Question getQuestionById(int id) {
         return questionDao.getQuestionById(id);
@@ -38,5 +42,9 @@ public class QuestionService {
 
     public void removeQuestionById(int questionId) {
         questionDao.removeQuestionById(questionId);
+    }
+    
+    public List<Question> getQuestionsByQuizId(int quizId) {
+    	return questionDao.getQuestionsByQuizId(quizId);
     }
 }

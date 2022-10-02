@@ -308,3 +308,7 @@ tbody tr td{
   background-color: #ddd;
   border-radius: 5px;
 }
+
+td.hidden {
+	display: none;
+}

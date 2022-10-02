@@ -42,10 +42,9 @@ public class LogInFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
 		
-		System.out.println("doFilter");
+		
+		System.out.println("doFilter start");
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -62,7 +61,7 @@ public class LogInFilter implements Filter {
 		} else {
 			httpResponse.sendRedirect(url);
 		}
-
+		System.out.println("doFilter end");
 	}
 
 	/**

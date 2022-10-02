@@ -41,7 +41,7 @@ public class Quizzes extends HttpServlet {
 //		quizService.createQuiz(quiz2);
 //		System.out.println(quizArray);
 		
-		List<Quiz> quizzes = quizService.getQuizzesDefault();
+		List<Quiz> quizzes = quizService.getQuizzes();
 		for(int i = 0; i < quizzes.size(); ++i)
 		{
 			System.out.println(quizzes.get(i));
