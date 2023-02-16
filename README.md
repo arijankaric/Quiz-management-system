@@ -1,21 +1,12 @@
 ## General info
 This project is a simple web application that enables management and playing of quizzes.
+It was the final project for course Web Application Development
 	
 ## Technologies
 Project is created with:
-* Java(JSP, MVC principles)
-* Javascript
-* jQuery
+* Java(Servlet, JSP, MVC principles, Websocket)
+* Javascript(jQuery)
 * Apache Derby & Tomcat
-	
-[comment]:## Setup
-To run this project, install it locally using npm:
-
-```
-$ cd ../lorem
-$ npm install
-$ npm start
-```
 
 ## Video Demonstration
 
