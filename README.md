@@ -4,7 +4,7 @@ It was the final project for course Web Application Development
 	
 ## Technologies
 Project is created with:
-* Java(Servlet, JSP, MVC principles, Websocket)
+* Java(Servlet, JSP, MVC principles, Websocket, REST API)
 * Javascript(jQuery)
 * Apache Derby & Tomcat
 
