@@ -8,7 +8,7 @@ Project is created with:
 * jQuery
 * Apache Derby & Tomcat
 	
-<>## Setup
+[comment]:## Setup
 To run this project, install it locally using npm:
 
 ```
