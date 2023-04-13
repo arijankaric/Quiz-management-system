@@ -1,6 +1,15 @@
 ## General info
 This project is a simple web application that enables management and playing of quizzes.
 It was the final project for course Web Application Development
+
+## Project Summary:
+
+Developed a quiz management system utilizing Apache Derby as the database, Apache Tomcat for serving the application, with a backend implemented in Java/Servlets/JSP, and a frontend built with vanilla JS/HTML/CSS.
+Implemented CRUD (Create, Read, Update, Delete) operations for admins to manage quizzes, including creating new quizzes, editing existing quizzes, and deleting quizzes.
+Enabled guests to play quizzes that are started by admins, with real-time updates on quiz status, score, and time during quiz games facilitated through websockets.
+Utilized websockets for seamless communication and dynamic updates between the frontend and backend, providing an interactive and real-time quiz experience.
+Deployed the application on Apache Tomcat, a popular Java web server and servlet container, to handle incoming HTTP requests and manage websocket connections.
+Contributed to both frontend and backend development, including UI/UX design, data retrieval, and real-time updates using JavaScript, HTML, CSS, Java, Servlets, and JSP technologies.
 	
 ## Technologies
 
@@ -37,4 +46,3 @@ Tomcat also manages the websocket connections between the frontend and backend, 
 ## Video Demonstration
 
 https://user-images.githubusercontent.com/106106584/219440650-4a9bc454-a7e8-4be0-b0c4-bd514d378577.mp4
-
